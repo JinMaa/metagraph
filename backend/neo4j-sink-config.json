@@ -1,0 +1,17 @@
+{
+  "name": "neo4j-sink",
+  "config": {
+    "connector.class": "streams.kafka.connect.sink.Neo4jSinkConnector",
+    "topics": "debshrew.cdc",
+    "neo4j.server.uri": "bolt://neo4j:7687",
+    "neo4j.authentication.basic.username": "neo4j",
+    "neo4j.authentication.basic.password": "password",
+    "neo4j.topic.cypher.debshrew.cdc": "CALL apoc.do.case([event.payload.table = 'blocks', 'MERGE (block:block {hash: event.after.hash}) SET block.size = event.after.size, block.txcount = event.after.txcount, block.version = event.after.version, block.prevblock = event.after.prevblock, block.merkleroot = event.after.merkleroot, block.time = event.after.time, block.bits = event.after.bits, block.nonce = event.after.nonce, block.height = event.after.height MERGE (prevblock:block {hash: event.after.prevblock}) MERGE (block)-[:chain]->(prevblock)', event.payload.table = 'transactions', 'MATCH (block:block {hash: event.header.block_hash}) MERGE (tx:tx {txid: event.after.txid}) MERGE (tx)-[:inc {i: event.after.index_in_block}]->(block) SET tx.version = event.after.version, tx.locktime = event.after.locktime, tx.size = event.after.size, tx.weight = event.after.weight, tx.fee = event.after.fee', event.payload.table = 'inputs', 'MATCH (tx:tx {txid: event.after.txid}) MERGE (prevOutput:output {index: event.after.prev_txid + \":\" + event.after.prev_vout}) MERGE (prevOutput)-[:in {vin: event.after.vin, scriptSig: event.after.scriptSig, sequence: event.after.sequence, witness: event.after.witness}]->(tx) REMOVE prevOutput:unspent', event.payload.table = 'outputs', 'MATCH (tx:tx {txid: event.after.txid}) MERGE (output:output {index: event.after.index}) SET output.value = event.after.value, output.scriptPubKey = event.after.scriptPubKey, output:unspent MERGE (tx)-[:out {vout: event.after.vout}]->(output) WITH output, event WHERE event.after.addresses IS NOT NULL AND size(event.after.addresses) > 0 MERGE (address:address {address: event.after.addresses}) MERGE (output)-[:locked]->(address)'], 'RETURN \"Unknown event type: \" + event.payload.table', {event: event}) YIELD value RETURN value",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "metashrew": {
+    "url": "http://localhost:8080",
+    "timeout": 30,
+    "max_retries": 3,
+    "retry_delay": 1000
+  },
+  "transform": {
+    "path": "examples/simple-transform/target/wasm32-unknown-unknown/release/simple_transform.wasm"
+  },
+  "sink": {
+    "type": "kafka",
+    "bootstrap_servers": "localhost:29092",
+    "topic": "debshrew.cdc",
+    "client_id": "debshrew",
+    "batch_size": 100,
+    "flush_interval": 1000
+  },
+  "cache_size": 6,
+  "start_height": 880000,
+  "log_level": "info"
+}
