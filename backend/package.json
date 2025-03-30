@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init-db": "node src/scripts/initDatabase.js",
+    "import-blocks": "node src/scripts/importBlocks.js",
+    "resolve-orphans": "node src/scripts/resolveOrphans.js",
+    "detect-reorg": "node src/scripts/detectReorg.js",
+    "sync-chain": "node src/scripts/syncChain.js",
+    "test-api": "node src/scripts/testSandshrewApi.js",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@oyl/sdk": "^1.15.0",
+    "axios": "^1.8.4",
+    "bitcoinjs-lib": "^6.1.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "neo4j-driver": "^5.28.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
