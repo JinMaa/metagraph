@@ -1,4 +1,6 @@
 .env
+backend/bitcoin-to-neo4j/
+backend/debshrew/
 
 # windsurf rules
 .windsurfrules
