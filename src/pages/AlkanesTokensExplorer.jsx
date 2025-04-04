@@ -18,7 +18,7 @@ const AlkanesTokensExplorer = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalTokens, setTotalTokens] = useState(0);
-  const tokensPerPage = 75;
+  const tokensPerPage = 200;
   
   // Fetch tokens on component mount and when page or endpoint changes
   useEffect(() => {
