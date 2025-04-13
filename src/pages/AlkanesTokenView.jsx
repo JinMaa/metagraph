@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext, useParams, Link } from 'react-router-dom';
 import ProgressBar from '../components/shared/ProgressBar';
 import { getAllAlkanes, getAlkanesTokenImage } from '../sdk/alkanes';
+import bombIcon from '../assets/bomb.svg';
 
 /**
  * AlkanesTokenView Component
@@ -204,7 +205,7 @@ const AlkanesTokenView = () => {
                         {isUnverifiedWasm(token.name) ? (
                           <span>
                               <img 
-                                src="/src/assets/bomb.png" 
+                                src={bombIcon} 
                                 alt="Bomb Warning" 
                                 style={{ verticalAlign: 'middle', marginRight: '5px', width: '20px', height: '20px' }}
                               />

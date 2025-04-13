@@ -3,6 +3,7 @@ import { useOutletContext, useNavigate, Link, useLocation } from 'react-router-d
 import useTokensWithCache from '../hooks/useTokensWithCache';
 import ProgressBar from '../components/shared/ProgressBar';
 import { getAllAlkanes, getAlkanesTokenImage } from '../sdk/alkanes';
+import bombIcon from '../assets/bomb.svg';
 
 /**
  * AlkanesTokensExplorer Component (98.css version)
@@ -301,7 +302,7 @@ const AlkanesTokensExplorer = () => {
                           {isUnverifiedWasm(individualToken.name) ? (
                             <span>
                               <img 
-                                src="/src/assets/bomb.png" 
+                                src={bombIcon} 
                                 alt="Bomb Warning" 
                                 style={{ verticalAlign: 'middle', marginRight: '5px', width: '20px', height: '20px' }}
                               />
@@ -488,7 +489,7 @@ const AlkanesTokensExplorer = () => {
                         {isUnverifiedWasm(token.name) ? (
                           <span>
                             <img 
-                              src="/src/assets/bomb.png" 
+                              src={bombIcon} 
                               alt="Bomb Warning" 
                               style={{ verticalAlign: 'middle', marginRight: '5px', width: '20px', height: '20px' }}
                             />
