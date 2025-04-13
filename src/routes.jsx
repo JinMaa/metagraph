@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import Home from './pages/Home';
@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import ShadowVoutDocs from './pages/ShadowVoutDocs';
 import AlkanesBalanceExplorer from './pages/AlkanesBalanceExplorer';
 import AlkanesTokensExplorer from './pages/AlkanesTokensExplorer';
+import AlkanesTokenView from './pages/AlkanesTokenView';
 import AlkanesTemplatesExplorer from './pages/AlkanesTemplatesExplorer';
 import BitcoinAddressExplorer from './pages/BitcoinAddressExplorer';
 import TransactionInputsOutputsExplorer from './pages/TransactionInputsOutputsExplorer';
@@ -28,6 +29,15 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <AlkanesTokensExplorer />
+      },
+      // Redirect from root to 2:n explorer
+      {
+        path: '',
+        element: <AlkanesTokensExplorer />
+      },
+      {
+        path: 'home',
         element: <Home />
       },
       {
@@ -57,8 +67,14 @@ const router = createBrowserRouter([
         element: <APIMethodPage methodComponent={ProtorunesByOutpointForm} methodName="Protorunes By Outpoint" />
       },
       // Explorer routes
+      // Redirect from old path to new path
       {
         path: 'explorer/alkanes-tokens',
+        element: <AlkanesTokensExplorer />
+      },
+      // Use a wildcard route for all explorer pages
+      {
+        path: 'explorer/*',
         element: <AlkanesTokensExplorer />
       },
       {

@@ -14,7 +14,7 @@ const AlkanesTemplatesExplorer = () => {
     if (!tokenId || typeof tokenId.block === 'undefined' || typeof tokenId.tx === 'undefined') {
       return 'Invalid ID';
     }
-    return `${tokenId.block}:${shortenTx(tokenId.tx)}`;
+    return `${tokenId.block}:${tokenId.tx}`;
   };
 
   // Helper function to format large numbers
@@ -40,22 +40,15 @@ const AlkanesTemplatesExplorer = () => {
       {/* Content Area */}
       <fieldset className="group-box">
         <legend>Templates</legend>
-        <table>
-          <tbody>
-            {results.map((template, index) => (
-              <tr key={`${template.tokenId?.tx}-${index}`}>
-                <td>{formatAlkaneId(template.tokenId)}</td>
-                <td>{template.name || '-'}</td>
-                <td>{template.symbol || '-'}</td>
-                <td>{template.description || '-'}</td>
-                <td>{formatLargeNumber(template.cap)}</td>
-                <td>{template.mint?.toLocaleString() || '-'}</td>
-                <td>{template.limit?.toLocaleString() || '-'}</td>
-                <td>{template.height_start || '-'} : {template.height_end || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="status-bar" style={{ margin: '20px 0' }}>
+          <p className="status-bar-field">Coming Soon</p>
+          <p className="status-bar-field">Templates Explorer is under development</p>
+        </div>
+        
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <p>The Alkanes Templates Explorer will allow you to browse and search for deployed Alkanes factory templates.</p>
+          <p>This feature is currently being implemented and will be available in a future update.</p>
+        </div>
       </fieldset>
     </div>
   );

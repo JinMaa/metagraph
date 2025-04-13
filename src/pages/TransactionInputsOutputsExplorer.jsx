@@ -482,288 +482,97 @@ const TransactionInputsOutputsExplorer = () => {
     }
   };
   
-  // CSS for inline styling according to design guidelines
-  const styles = {
-    container: {
-      width: '100%',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      backgroundColor: '#FFFFFF',
-      padding: '20px',
-      border: '1px solid #E0E0E0',
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      marginBottom: '16px',
-      textAlign: 'left',
-      fontFamily: 'Roboto Mono, monospace',
-    },
-    subtitle: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      marginBottom: '12px',
-      textAlign: 'left',
-      fontFamily: 'Roboto Mono, monospace',
-    },
-    description: {
-      fontSize: '14px',
-      marginBottom: '20px',
-      textAlign: 'left',
-      fontFamily: 'Roboto Mono, monospace',
-    },
-    section: {
-      marginBottom: '20px',
-      padding: '20px',
-      backgroundColor: '#FFFFFF',
-      border: '1px solid #E0E0E0',
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '16px',
-    },
-    formRow: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-      flexWrap: 'wrap',
-    },
-    label: {
-      fontWeight: 'bold',
-      marginBottom: '8px',
-      display: 'block',
-      fontFamily: 'Roboto Mono, monospace',
-      fontSize: '14px',
-    },
-    input: {
-      padding: '8px',
-      border: '1px solid #E0E0E0',
-      borderRadius: '4px',
-      width: '100%',
-      fontFamily: 'Roboto Mono, monospace',
-      fontSize: '14px',
-    },
-    button: {
-      backgroundColor: '#000000',
-      color: '#FFFFFF',
-      border: 'none',
-      padding: '8px 16px',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontFamily: 'Roboto Mono, monospace',
-      fontSize: '14px',
-      fontWeight: 'bold',
-    },
-    secondaryButton: {
-      backgroundColor: '#FFFFFF',
-      color: '#000000',
-      border: '1px solid #000000',
-      padding: '8px 16px',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontFamily: 'Roboto Mono, monospace',
-      fontSize: '14px',
-    },
-    disabledButton: {
-      backgroundColor: '#CCCCCC',
-      color: '#666666',
-      border: 'none',
-      padding: '8px 16px',
-      borderRadius: '4px',
-      cursor: 'not-allowed',
-      fontFamily: 'Roboto Mono, monospace',
-      fontSize: '14px',
-    },
-    transactionCard: {
-      marginBottom: '20px',
-      padding: '15px',
-      border: '1px solid #E0E0E0',
-      borderRadius: '4px',
-      backgroundColor: '#FFFFFF',
-    },
-    transactionHeader: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '10px',
-      padding: '5px 0',
-      borderBottom: '1px solid #E0E0E0',
-    },
-    txid: {
+  // Custom CSS classes for 98.css styling
+  const customStyles = {
+    monospaceText: {
       fontFamily: 'monospace',
+    },
+    clickable: {
       cursor: 'pointer',
     },
-    inputOutputContainer: {
-      display: 'flex',
-      gap: '20px',
-    },
-    column: {
-      flex: 1,
-      padding: '10px',
-      backgroundColor: '#F5F5F5',
-      borderRadius: '4px',
-    },
-    columnHeader: {
-      fontSize: '16px',
-      fontWeight: 'bold',
-      marginBottom: '10px',
-      textAlign: 'center',
-    },
-    item: {
+    flexBetween: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '8px',
-      marginBottom: '5px',
-      backgroundColor: '#FFFFFF',
-      borderRadius: '4px',
-      border: '1px solid #E0E0E0',
     },
-    itemAddress: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '5px',
-    },
-    address: {
-      fontFamily: 'monospace',
-      cursor: 'pointer',
-    },
-    itemValue: {
-      fontWeight: 'bold',
-    },
-    redCircle: {
-      color: '#F44336',
-      fontSize: '12px',
-    },
-    greenCircle: {
-      color: '#4CAF50',
-      fontSize: '12px',
-    },
-    totalRow: {
-      padding: '10px',
-      textAlign: 'right',
-      fontWeight: 'bold',
-      borderTop: '1px solid #E0E0E0',
-      marginTop: '10px',
-    },
-    feeRow: {
-      padding: '10px',
-      textAlign: 'right',
-      fontWeight: 'bold',
-      borderTop: '1px solid #E0E0E0',
-      marginTop: '10px',
-    },
-    pagination: {
+    flexCenter: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    flexGap: {
+      display: 'flex',
       gap: '10px',
-      marginTop: '20px',
     },
-    paginationButton: {
-      padding: '5px 10px',
-      backgroundColor: '#000000',
-      color: '#FFFFFF',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
+    fullWidth: {
+      width: '100%',
     },
-    pageInfo: {
-      fontFamily: 'Roboto Mono, monospace',
+    marginBottom: {
+      marginBottom: '16px',
     },
-    opReturn: {
-      fontFamily: 'monospace',
-      backgroundColor: '#E0E0E0',
+    marginTop: {
+      marginTop: '16px',
+    },
+    textAlignRight: {
+      textAlign: 'right',
+    },
+    textAlignCenter: {
+      textAlign: 'center',
+    },
+    inlineTag: {
+      display: 'inline-block',
+      marginLeft: '5px',
+      fontSize: '12px',
       padding: '2px 5px',
-      borderRadius: '4px',
     },
-    runestone: {
+    opReturnTag: {
+      backgroundColor: '#c0c0c0',
+      color: '#000000',
+    },
+    runesTag: {
       backgroundColor: '#9C27B0',
       color: '#FFFFFF',
-      padding: '2px 5px',
-      borderRadius: '4px',
-      marginLeft: '5px',
-      fontSize: '12px',
     },
-    alkanes: {
+    alkanesTag: {
       backgroundColor: '#FF9800',
       color: '#FFFFFF',
-      padding: '2px 5px',
-      borderRadius: '4px',
-      marginLeft: '5px',
-      fontSize: '12px',
     },
     alkanesDetails: {
       marginTop: '5px',
       padding: '5px',
-      backgroundColor: '#FFF3E0',
-      borderRadius: '4px',
-      fontSize: '12px',
-      fontFamily: 'monospace',
-    },
-    detailsButton: {
-      backgroundColor: '#2196F3',
-      color: '#FFFFFF',
-      border: 'none',
-      padding: '5px 10px',
-      borderRadius: '4px',
-      cursor: 'pointer',
+      backgroundColor: '#ffffcc',
       fontSize: '12px',
     },
-    progressContainer: {
-      marginTop: '20px',
-      marginBottom: '20px',
-      textAlign: 'center',
-    },
-    progressBar: {
-      width: '100%',
-      height: '20px',
-      backgroundColor: '#E0E0E0',
-      borderRadius: '4px',
-      margin: '10px 0',
-      overflow: 'hidden',
-    },
-    progressBarFill: {
-      height: '100%',
-      backgroundColor: '#4CAF50',
-      borderRadius: '4px',
-      transition: 'width 0.3s ease',
-    },
-    transactionStats: {
-      marginBottom: '15px',
-      padding: '10px',
-      backgroundColor: '#F5F5F5',
-      borderRadius: '4px',
-      textAlign: 'center',
+    progressText: {
+      marginBottom: '8px',
     },
   };
   
   return (
-    <div style={styles.container}>
-      <div style={styles.section}>
-        <h2 style={styles.title}>Transaction Inputs & Outputs Explorer</h2>
-        <p style={styles.description}>
-          Search for a Bitcoin address to view all its transactions with inputs and outputs.
-        </p>
-        
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.formRow}>
-            <label style={styles.label}>
-              Bitcoin Address:
-              <input
-                type="text"
-                value={manualAddress}
-                onChange={(e) => setManualAddress(e.target.value)}
-                placeholder="Enter Bitcoin address"
-                style={styles.input}
-              />
-            </label>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px' }}>
+      <h2>Transaction Inputs & Outputs Explorer</h2>
+      <p className={customStyles.marginBottom}>
+        Search for a Bitcoin address to view all its transactions with inputs and outputs.
+      </p>
+      
+      <fieldset>
+        <legend>Search</legend>
+        <form onSubmit={handleSubmit}>
+          <div className="field-row-stacked">
+            <label htmlFor="bitcoinAddress">Bitcoin Address:</label>
+            <input
+              id="bitcoinAddress"
+              type="text"
+              value={manualAddress}
+              onChange={(e) => setManualAddress(e.target.value)}
+              placeholder="Enter Bitcoin address"
+              className={customStyles.fullWidth}
+            />
           </div>
           
-          <div style={styles.formRow}>
+          <div className="field-row" style={{ marginTop: '16px' }}>
             <button 
               type="submit" 
-              style={loading ? styles.disabledButton : styles.button}
               disabled={loading}
             >
               {loading ? 'Searching...' : 'Search'}
@@ -773,7 +582,6 @@ const TransactionInputsOutputsExplorer = () => {
               <button
                 type="button"
                 onClick={useConnectedWallet}
-                style={styles.secondaryButton}
               >
                 Use Connected Wallet
               </button>
@@ -782,168 +590,206 @@ const TransactionInputsOutputsExplorer = () => {
         </form>
         
         {error && (
-          <div style={{ color: 'red', marginTop: '10px' }}>
-            Error: {error}
+          <div className="status-bar error" style={{ marginTop: '16px', color: 'red' }}>
+            <div className="status-bar-field">Error: {error}</div>
           </div>
         )}
-      </div>
+      </fieldset>
       
-      {address && (
-        <div style={styles.section}>
-          <h3 style={styles.subtitle}>Transactions for {address}</h3>
+        {address && (
+        <fieldset style={{ marginTop: '16px' }}>
+          <legend>Results</legend>
+          <div className="field-row" style={{ marginBottom: '16px' }}>
+            <label>Address:</label>
+            <span className={customStyles.monospaceText}>{address}</span>
+          </div>
           
           {loading ? (
-            <div>Loading transactions...</div>
+            <div className="status-bar">
+              <div className="status-bar-field">Loading transactions...</div>
+            </div>
           ) : fetchingAllTransactions ? (
-            <div style={styles.progressContainer}>
-              <div>Fetching transactions... {fetchProgress}% complete</div>
-              <div style={styles.progressBar}>
-                <div
-                  style={{
-                    ...styles.progressBarFill,
-                    width: `${fetchProgress}%`
-                  }}
-                ></div>
+            <div>
+              <p className={customStyles.progressText}>Fetching transactions... {fetchProgress}% complete</p>
+              <div className="sunken-panel" style={{ height: '20px', position: 'relative', marginBottom: '8px' }}>
+                <div style={{ 
+                  position: 'absolute', 
+                  left: 0, 
+                  top: 0, 
+                  height: '100%', 
+                  width: `${fetchProgress}%`,
+                  backgroundColor: '#008080'
+                }}></div>
               </div>
-              <div>This may take a while for addresses with many transactions.</div>
+              <p className={customStyles.progressText}>This may take a while for addresses with many transactions.</p>
             </div>
           ) : processedTransactions.length > 0 ? (
             <div>
-              <div style={styles.transactionStats}>
-                <p>Showing {getCurrentPageTransactions().length} of {processedTransactions.length} transactions (Total: {totalTransactions})</p>
+              <div className="status-bar" style={{ marginBottom: '16px' }}>
+                <div className="status-bar-field">
+                  Showing {getCurrentPageTransactions().length} of {processedTransactions.length} transactions (Total: {totalTransactions})
+                </div>
               </div>
               
               {getCurrentPageTransactions().map((tx, index) => (
-                <div key={tx.txid} style={styles.transactionCard}>
-                  <div style={styles.transactionHeader}>
-                    <div>
-                      <strong>Transaction:</strong> 
+                <fieldset key={tx.txid} style={{ marginBottom: '16px' }}>
+                  <legend>Transaction {index + 1}</legend>
+                    
+                    <div className="field-row" style={{ marginBottom: '8px' }}>
+                      <label>TXID:</label>
                       <span 
-                        style={styles.txid}
+                        className={`${customStyles.monospaceText} ${customStyles.clickable}`}
                         onClick={() => copyToClipboard(tx.txid)}
                         title="Click to copy"
                       >
                         {tx.txid}
                       </span>
                     </div>
-                    <div>
-                      <strong>Date:</strong> {formatDate(tx.status?.block_time)}
+                    
+                    <div className="field-row" style={{ marginBottom: '8px' }}>
+                      <label>Date:</label>
+                      <span>{formatDate(tx.status?.block_time)}</span>
                     </div>
-                  </div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <h4 style={{ margin: 0 }}>Inputs & Outputs</h4>
-                    <button style={styles.detailsButton}>Details</button>
-                  </div>
-                  
-                  <div style={styles.inputOutputContainer}>
-                    {/* Inputs Column */}
-                    <div style={styles.column}>
-                      <h4 style={styles.columnHeader}>Inputs</h4>
-                      {tx.inputs.map((input, i) => (
-                        <div key={i} style={styles.item}>
-                          <div style={styles.itemAddress}>
-                            <span style={styles.redCircle}>●</span>
-                            {input.isCoinbase ? (
-                              <span style={styles.opReturn}>Coinbase (New Coins)</span>
-                            ) : (
-                              <span 
-                                style={styles.address}
-                                onClick={() => copyToClipboard(input.address)}
-                                title="Click to copy"
-                              >
-                                {shortenAddress(input.address)}
-                              </span>
-                            )}
+                    
+                    <div className="field-row" style={{ marginBottom: '8px', justifyContent: 'space-between' }}>
+                      <span>Inputs & Outputs</span>
+                      <button>Details</button>
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '16px' }}>
+                      {/* Inputs Column */}
+                      <div style={{ flex: 1 }}>
+                        <fieldset>
+                          <legend>Inputs</legend>
+                          <div className="sunken-panel" style={{ maxHeight: '200px', overflow: 'auto' }}>
+                            {tx.inputs.map((input, i) => (
+                              <div key={i} className="field-row" style={{ margin: '4px 0', padding: '4px', border: '1px solid #c0c0c0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span style={{ color: '#FF0000', marginRight: '5px' }}>▶</span>
+                                  {input.isCoinbase ? (
+                                    <span className={`${customStyles.inlineTag} ${customStyles.opReturnTag}`}>Coinbase (New Coins)</span>
+                                  ) : (
+                                    <span 
+                                      className={`${customStyles.monospaceText} ${customStyles.clickable}`}
+                                      onClick={() => copyToClipboard(input.address)}
+                                      title="Click to copy"
+                                    >
+                                      {shortenAddress(input.address)}
+                                    </span>
+                                  )}
+                                </div>
+                                <div style={{ fontWeight: 'bold' }}>
+                                  {input.valueBTC.toFixed(8)} BTC
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                          <div style={styles.itemValue}>
-                            {input.valueBTC.toFixed(8)} BTC
+                          <div className="status-bar" style={{ marginTop: '8px' }}>
+                            <div className="status-bar-field" style={{ justifyContent: 'flex-end' }}>
+                              <strong>Total:</strong> {tx.totalInputBTC.toFixed(8)} BTC
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      <div style={styles.totalRow}>
-                        <strong>Total:</strong> {tx.totalInputBTC.toFixed(8)} BTC
+                        </fieldset>
+                      </div>
+                      
+                      {/* Outputs Column */}
+                      <div style={{ flex: 1 }}>
+                        <fieldset>
+                          <legend>Outputs</legend>
+                          <div className="sunken-panel" style={{ maxHeight: '200px', overflow: 'auto' }}>
+                            {tx.outputs.map((output, i) => (
+                              <div key={i} className="field-row" style={{ margin: '4px 0', padding: '4px', border: '1px solid #c0c0c0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span style={{ color: '#00AA00', marginRight: '5px' }}>◀</span>
+                                  {output.isOpReturn ? (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                      <span className={`${customStyles.inlineTag} ${customStyles.opReturnTag}`}>OP_RETURN</span>
+                                      <span className={`${customStyles.inlineTag} ${customStyles.runesTag}`}>Runestone</span>
+                                    </div>
+                                  ) : (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                      <span
+                                        className={`${customStyles.monospaceText} ${customStyles.clickable}`}
+                                        onClick={() => copyToClipboard(output.address)}
+                                        title="Click to copy"
+                                      >
+                                        {shortenAddress(output.address)}
+                                      </span>
+                                      {output.alkanes && (
+                                        <span className={`${customStyles.inlineTag} ${customStyles.alkanesTag}`}>Alkanes</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                                <div style={{ fontWeight: 'bold' }}>
+                                  {output.valueBTC.toFixed(8)} BTC
+                                </div>
+                                {output.alkanes && (
+                                  <div className="sunken-panel" style={{ width: '100%', marginTop: '8px', padding: '8px', backgroundColor: '#ffffcc' }}>
+                                    <div className="field-row" style={{ marginBottom: '4px', justifyContent: 'space-between' }}>
+                                      <span style={{ fontWeight: 'bold' }}>Token Details ({output.alkanes.length})</span>
+                                    </div>
+                                    
+                                    {output.alkanes.map((alkane, j) => (
+                                      <div key={j} style={{ 
+                                        padding: '4px', 
+                                        margin: '4px 0', 
+                                        border: '1px solid #c0c0c0',
+                                        backgroundColor: '#ffffff'
+                                      }}>
+                                        <div className="field-row">
+                                          <label>Token:</label>
+                                          <span>{alkane.token.name} ({alkane.token.symbol})</span>
+                                        </div>
+                                        <div className="field-row">
+                                          <label>ID:</label>
+                                          <span>{alkane.token.id.formatted}</span>
+                                        </div>
+                                        <div className="field-row">
+                                          <label>Value:</label>
+                                          <span>{alkane.valueFormatted.toFixed(8)}</span>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="status-bar" style={{ marginTop: '8px' }}>
+                            <div className="status-bar-field" style={{ justifyContent: 'flex-end' }}>
+                              <strong>Total:</strong> {tx.totalOutputBTC.toFixed(8)} BTC
+                            </div>
+                          </div>
+                        </fieldset>
                       </div>
                     </div>
                     
-                    {/* Outputs Column */}
-                    <div style={styles.column}>
-                      <h4 style={styles.columnHeader}>Outputs</h4>
-                      {tx.outputs.map((output, i) => (
-                        <div key={i} style={styles.item}>
-                          <div style={styles.itemAddress}>
-                            <span style={styles.greenCircle}>●</span>
-                            {output.isOpReturn ? (
-                              <div>
-                                <span style={styles.opReturn}>OP_RETURN</span>
-                                <span style={styles.runestone}>Runestone</span>
-                              </div>
-                            ) : (
-                              <div>
-                                <span
-                                  style={styles.address}
-                                  onClick={() => copyToClipboard(output.address)}
-                                  title="Click to copy"
-                                >
-                                  {shortenAddress(output.address)}
-                                </span>
-                                {output.alkanes && (
-                                  <span style={styles.alkanes}>Alkanes</span>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                          <div style={styles.itemValue}>
-                            {output.valueBTC.toFixed(8)} BTC
-                          </div>
-                          {output.alkanes && (
-                            <div style={styles.alkanesDetails}>
-                              {output.alkanes.map((alkane, j) => (
-                                <div key={j}>
-                                  <div>
-                                    <strong>Token:</strong> {alkane.token.name} ({alkane.token.symbol})
-                                  </div>
-                                  <div>
-                                    <strong>ID:</strong> {alkane.token.id.formatted}
-                                  </div>
-                                  <div>
-                                    <strong>Value:</strong> {alkane.valueFormatted.toFixed(8)}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                      <div style={styles.totalRow}>
-                        <strong>Total:</strong> {tx.totalOutputBTC.toFixed(8)} BTC
+                    <div className="status-bar" style={{ marginTop: '8px' }}>
+                      <div className="status-bar-field" style={{ justifyContent: 'flex-end' }}>
+                        <strong>Fee:</strong> {tx.feeBTC.toFixed(8)} BTC
                       </div>
                     </div>
-                  </div>
-                  
-                  <div style={styles.feeRow}>
-                    <strong>Fee:</strong> {tx.feeBTC.toFixed(8)} BTC
-                  </div>
-                </div>
-              ))}
+                  </fieldset>
+                ))}
               
               {/* Pagination */}
               {totalPages > 1 && (
-                <div style={styles.pagination}>
+                <div className="field-row" style={{ justifyContent: 'center', marginTop: '16px' }}>
                   <button
                     onClick={handlePreviousPage}
                     disabled={page === 1}
-                    style={page === 1 ? styles.disabledButton : styles.paginationButton}
                   >
                     Previous
                   </button>
-                  <span style={styles.pageInfo}>
-                    Page {page} of {totalPages} ({processedTransactions.length} of {totalTransactions} transactions)
-                  </span>
+                  <div className="status-bar" style={{ margin: '0 10px' }}>
+                    <div className="status-bar-field">
+                      Page {page} of {totalPages} ({processedTransactions.length} of {totalTransactions} transactions)
+                    </div>
+                  </div>
                   <button
                     onClick={handleNextPage}
                     disabled={page === totalPages}
-                    style={page === totalPages ? styles.disabledButton : styles.paginationButton}
                   >
                     Next
                   </button>
@@ -951,10 +797,19 @@ const TransactionInputsOutputsExplorer = () => {
               )}
             </div>
           ) : (
-            <div>No transactions found for this address.</div>
+            <div className="status-bar">
+              <div className="status-bar-field">No transactions found for this address.</div>
+            </div>
           )}
-        </div>
+        </fieldset>
       )}
+      
+      <div className="status-bar" style={{ marginTop: '16px' }}>
+        <div className="status-bar-field">Network: {endpoint}</div>
+        <div className="status-bar-field">
+          {loading ? 'Searching...' : fetchingAllTransactions ? `Fetching: ${fetchProgress}%` : 'Ready'}
+        </div>
+      </div>
     </div>
   );
 };

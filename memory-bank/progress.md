@@ -137,7 +137,14 @@ The project is in active development, with significant progress made on implemen
 
 ## Known Issues
 
-### 1. Network Switching Race Condition
+### 1. Explorer Pages Issues
+- The "Show unverified WASM contracts" checkbox styling has been fixed, but filtering functionality is not working correctly
+- When toggling the checkbox to show unverified contracts, it doesn't display all missing tokens
+- Results are being cut short for all tokens, affecting pagination
+- Pagination controls have been improved but still don't work correctly
+- Need to investigate if we should fetch all tokens first and then handle pagination client-side
+
+### 2. Network Switching Race Condition
 - Network switching can cause race conditions when switching rapidly between networks
 - UI can display data from one network while showing a different network is selected
 - This is a critical issue that undermines application reliability

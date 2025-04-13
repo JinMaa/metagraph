@@ -42,61 +42,62 @@ const TerminalCodeBlock = ({
     });
   };
 
-  // Custom terminal theme based on VSCode Dark+ with transparent token backgrounds
+  // MS-DOS style terminal theme
   const customStyle = {
     ...vscDarkPlus,
     'pre[class*="language-"]': {
-      ...vscDarkPlus['pre[class*="language-"]'],
-      backgroundColor: '#1E1E1E',
+      backgroundColor: '#000000', // Black background like MS-DOS
       margin: 0,
       padding: '12px',
       overflow: 'auto',
       borderRadius: 0,
-      fontFamily: "'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace",
-      fontSize: '13px',
-      lineHeight: 1.5
+      fontFamily: "'Courier New', monospace", // Classic DOS-like font
+      fontSize: '14px',
+      lineHeight: 1.2,
+      color: '#FFFFFF' // White text like MS-DOS
     },
     'code[class*="language-"]': {
-      ...vscDarkPlus['code[class*="language-"]'],
-      fontFamily: "'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace",
-      fontSize: '13px',
-      lineHeight: 1.5,
-      backgroundColor: 'transparent'
+      fontFamily: "'Courier New', monospace", // Classic DOS-like font
+      fontSize: '14px',
+      lineHeight: 1.2,
+      backgroundColor: 'transparent',
+      color: '#FFFFFF' // White text like MS-DOS
     },
-    // Make all token backgrounds transparent
+    // Simplified token styling for MS-DOS look
     'token': {
-      backgroundColor: 'transparent !important'
+      backgroundColor: 'transparent !important',
+      color: '#FFFFFF' // Default white for all tokens
     },
     'keyword': {
-      ...vscDarkPlus['keyword'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'string': {
-      ...vscDarkPlus['string'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'number': {
-      ...vscDarkPlus['number'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'boolean': {
-      ...vscDarkPlus['boolean'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'property': {
-      ...vscDarkPlus['property'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'operator': {
-      ...vscDarkPlus['operator'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'punctuation': {
-      ...vscDarkPlus['punctuation'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     },
     'comment': {
-      ...vscDarkPlus['comment'],
+      color: '#FFFFFF', // White in MS-DOS
       backgroundColor: 'transparent'
     }
   };
@@ -105,84 +106,29 @@ const TerminalCodeBlock = ({
   const processedCode = showPrompt ? `$ ${code}` : code;
 
   return (
-    <div 
-      className="terminal-container"
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      style={{
-        backgroundColor: '#1E1E1E',
-        border: '1px solid #454545',
-        borderRadius: '6px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-        overflow: 'hidden',
-        position: 'relative',
-        width: '100%'
-      }}
-    >
-      {/* Terminal Header */}
-      <div 
-        className="terminal-header"
-        style={{
-          backgroundColor: '#323233',
-          padding: '6px 12px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #454545'
-        }}
-      >
-        <div 
-          className="terminal-title"
-          style={{
-            color: '#D4D4D4',
-            fontSize: '12px',
-            fontFamily: "'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace",
-          }}
-        >
-          {title}
-        </div>
-        <div className="terminal-actions">
-          {isHovering && (
-            <button
-              className="copy-button"
-              onClick={handleCopy}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#D4D4D4',
-                cursor: 'pointer',
-                fontSize: '12px',
-                padding: '2px 8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                opacity: 0.7,
-                transition: 'opacity 0.2s'
-              }}
-              onMouseEnter={(e) => e.target.style.opacity = 1}
-              onMouseLeave={(e) => e.target.style.opacity = 0.7}
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-          )}
+    <div className="window" style={{ width: '100%' }}>
+      {/* MS-DOS style title bar */}
+      <div className="title-bar">
+        <div className="title-bar-text">{title}</div>
+        <div className="title-bar-controls">
+          <button aria-label="Copy" onClick={handleCopy} title="Copy to clipboard">
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
         </div>
       </div>
 
-      {/* Terminal Content */}
-      <div
-        className="terminal-content"
-        style={{
-          overflow: 'auto'
-        }}
-      >
-        <SyntaxHighlighter
-          language={language}
-          style={customStyle}
-          showLineNumbers={showLineNumbers}
-          wrapLines={true}
-        >
-          {processedCode}
-        </SyntaxHighlighter>
+      {/* MS-DOS style terminal content */}
+      <div className="window-body" style={{ padding: 0 }}>
+        <div className="sunken-panel" style={{ padding: 0, margin: 0 }}>
+          <SyntaxHighlighter
+            language={language}
+            style={customStyle}
+            showLineNumbers={showLineNumbers}
+            wrapLines={true}
+          >
+            {processedCode}
+          </SyntaxHighlighter>
+        </div>
       </div>
     </div>
   );

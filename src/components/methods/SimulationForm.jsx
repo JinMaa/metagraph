@@ -45,89 +45,121 @@ const SimulationForm = ({ endpoint = 'local' }) => {
   };
 
   return (
-    <div className="simulation-form">
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '16px' }}>
       <h2>Simulate Transaction</h2>
-      <p className="api-description">
+      <p style={{ marginBottom: '16px' }}>
         This method simulates the execution of a transaction to preview its outcome without broadcasting it to the network.
       </p>
       
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="txid">Transaction ID:</label>
-          <input
-            type="text"
-            id="txid"
-            value={txid}
-            onChange={(e) => setTxid(e.target.value)}
-            placeholder="Enter transaction ID to simulate"
-            required
-          />
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="scriptHex">Script Hex (Optional):</label>
-          <input
-            type="text"
-            id="scriptHex"
-            value={scriptHex}
-            onChange={(e) => setScriptHex(e.target.value)}
-            placeholder="Optional: Enter script hex to use for simulation"
-          />
-        </div>
-        
-        <button type="submit" disabled={isLoading} className="submit-button">
-          {isLoading ? 'Simulating...' : 'Simulate Transaction'}
-        </button>
+        <fieldset>
+          <legend>Simulation Parameters</legend>
+          
+          <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
+            <label htmlFor="txid">Transaction ID:</label>
+            <input
+              type="text"
+              id="txid"
+              value={txid}
+              onChange={(e) => setTxid(e.target.value)}
+              placeholder="Enter transaction ID to simulate"
+              required
+              style={{ width: '100%' }}
+            />
+          </div>
+          
+          <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
+            <label htmlFor="scriptHex">Script Hex (Optional):</label>
+            <input
+              type="text"
+              id="scriptHex"
+              value={scriptHex}
+              onChange={(e) => setScriptHex(e.target.value)}
+              placeholder="Optional: Enter script hex to use for simulation"
+              style={{ width: '100%' }}
+            />
+          </div>
+          
+          <div className="field-row" style={{ marginTop: '16px' }}>
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? 'Simulating...' : 'Simulate Transaction'}
+            </button>
+          </div>
+        </fieldset>
       </form>
       
       {error && (
-        <div className="error-message">
-          <h3>Error</h3>
-          <p>{error}</p>
+        <div className="status-bar error" style={{ marginTop: '16px', color: 'red' }}>
+          <div className="status-bar-field">Error: {error}</div>
         </div>
       )}
       
       {isLoading && (
-        <div className="loading-message">
-          <p>Simulating transaction... This may take a moment.</p>
+        <div className="status-bar" style={{ marginTop: '16px' }}>
+          <div className="status-bar-field">Simulating transaction... This may take a moment.</div>
         </div>
       )}
       
       {results && !isLoading && (
-        <div className="results-container">
-          <h3>Simulation Results</h3>
+        <fieldset style={{ marginTop: '16px' }}>
+          <legend>Simulation Results</legend>
           
-          <div className="result-item">
-            <h4>Transaction Status</h4>
-            <p className={`status ${results.status}`}>
+          <div className="field-row" style={{ marginBottom: '16px' }}>
+            <label>Transaction Status:</label>
+            <div 
+              style={{ 
+                display: 'inline-block',
+                padding: '4px 8px',
+                backgroundColor: results.status === 'success' ? '#e6ffe6' : '#ffe6e6',
+                border: '1px solid',
+                borderColor: results.status === 'success' ? '#006600' : '#cc0000',
+                color: results.status === 'success' ? '#006600' : '#cc0000'
+              }}
+            >
               {results.status === 'success' ? 'Success' : 'Failed'}
-            </p>
+            </div>
           </div>
           
           {results.results && (
-            <>
+            <div className="sunken-panel" style={{ padding: '8px' }}>
               {results.results.gasUsed && (
-                <div className="result-item">
-                  <h4>Gas Used</h4>
-                  <p>{results.results.gasUsed}</p>
+                <div className="field-row" style={{ marginBottom: '8px' }}>
+                  <label>Gas Used:</label>
+                  <span>{results.results.gasUsed}</span>
                 </div>
               )}
               
               {results.results.value && (
-                <div className="result-item">
-                  <h4>Return Value</h4>
-                  <p>{results.results.value.toString()}</p>
+                <div className="field-row" style={{ marginBottom: '8px' }}>
+                  <label>Return Value:</label>
+                  <span>{results.results.value.toString()}</span>
                 </div>
               )}
               
-              <div className="result-details">
-                <h4>Full Results</h4>
-                <pre>{JSON.stringify(results.results, null, 2)}</pre>
+              <div style={{ marginTop: '16px' }}>
+                <h4 style={{ marginBottom: '8px' }}>Full Results</h4>
+                <pre style={{ 
+                  backgroundColor: '#f0f0f0', 
+                  padding: '8px', 
+                  overflow: 'auto',
+                  fontFamily: 'monospace',
+                  fontSize: '12px',
+                  border: '1px solid #c0c0c0'
+                }}>
+                  {JSON.stringify(results.results, null, 2)}
+                </pre>
               </div>
-            </>
+            </div>
           )}
-        </div>
+        </fieldset>
       )}
+      
+      <div className="status-bar" style={{ marginTop: '16px' }}>
+        <div className="status-bar-field">Network: {endpoint}</div>
+        <div className="status-bar-field">
+          {isLoading ? 'Simulating...' : 'Ready'}
+        </div>
+      </div>
     </div>
   );
 };

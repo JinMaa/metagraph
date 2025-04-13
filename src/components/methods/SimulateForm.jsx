@@ -130,17 +130,17 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
   };
 
   return (
-    <div className="simulation-form">
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '16px' }}>
       <h2>Simulate Alkanes Operation</h2>
-      <p className="api-description">
+      <p style={{ marginBottom: '16px' }}>
         This method simulates the execution of Alkanes operations to preview outcomes without broadcasting to the network.
       </p>
       
       <form onSubmit={handleSubmit}>
-        <div className="form-section">
-          <h3>Core Parameters</h3>
+        <fieldset>
+          <legend>Core Parameters</legend>
           
-          <div className="form-group">
+          <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
             <label htmlFor="alkanesId">Alkanes ID:</label>
             <select
               id="alkanesId"
@@ -148,7 +148,7 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
               onChange={handleAlkanesSelection}
               disabled={isLoadingAlkanes}
               required
-              className="alkanes-dropdown"
+              style={{ width: '100%' }}
             >
               <option value="">Select an Alkanes ID</option>
               {availableAlkanes.map((alkanes, index) => (
@@ -160,12 +160,22 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                 </option>
               ))}
             </select>
-            {isLoadingAlkanes && <span className="loading-indicator">Loading Alkanes...</span>}
-            {alkanesError && <span className="error-text">{alkanesError}</span>}
-            <small className="helper-text">Select the Alkanes ID to simulate against</small>
+            {isLoadingAlkanes && (
+              <div className="status-bar" style={{ marginTop: '4px' }}>
+                <div className="status-bar-field">Loading Alkanes...</div>
+              </div>
+            )}
+            {alkanesError && (
+              <div className="status-bar error" style={{ marginTop: '4px', color: 'red' }}>
+                <div className="status-bar-field">Error: {alkanesError}</div>
+              </div>
+            )}
+            <small style={{ display: 'block', marginTop: '4px', fontSize: '12px', color: '#666' }}>
+              Select the Alkanes ID to simulate against
+            </small>
           </div>
           
-          <div className="form-group">
+          <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
             <label htmlFor="operation">Operation:</label>
             <input
               type="text"
@@ -174,22 +184,34 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
               onChange={(e) => setOperation(e.target.value)}
               placeholder="Enter operation code to simulate"
               required
+              style={{ width: '100%' }}
             />
-            <small className="helper-text">The operation code to execute</small>
+            <small style={{ display: 'block', marginTop: '4px', fontSize: '12px', color: '#666' }}>
+              The operation code to execute
+            </small>
           </div>
-        </div>
+        </fieldset>
         
-        <div className="form-section advanced-options">
-          <div
-            className="advanced-toggle"
-            onClick={() => setShowAdvanced(!showAdvanced)}
-          >
-            <span>{showAdvanced ? '▼' : '►'} Advanced Options</span>
-          </div>
+        <fieldset style={{ marginTop: '16px' }}>
+          <legend>
+            <button 
+              type="button" 
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: '0', 
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+            >
+              {showAdvanced ? '▼' : '►'} Advanced Options
+            </button>
+          </legend>
           
           {showAdvanced && (
-            <div className="advanced-fields">
-              <div className="form-group">
+            <div>
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="transaction">Transaction Hash:</label>
                 <input
                   type="text"
@@ -197,10 +219,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.transaction}
                   onChange={(e) => handleAdvancedOptionChange('transaction', e.target.value)}
                   placeholder="0x"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="block">Block Hash:</label>
                 <input
                   type="text"
@@ -208,10 +231,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.block}
                   onChange={(e) => handleAdvancedOptionChange('block', e.target.value)}
                   placeholder="0x"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="height">Block Height:</label>
                 <input
                   type="text"
@@ -219,10 +243,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.height}
                   onChange={(e) => handleAdvancedOptionChange('height', e.target.value)}
                   placeholder="20000"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="txindex">Transaction Index:</label>
                 <input
                   type="number"
@@ -230,10 +255,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.txindex}
                   onChange={(e) => handleAdvancedOptionChange('txindex', e.target.value)}
                   placeholder="0"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="inputs">Inputs Array:</label>
                 <input
                   type="text"
@@ -249,10 +275,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                     }
                   }}
                   placeholder='["101"]'
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="pointer">Pointer:</label>
                 <input
                   type="number"
@@ -260,10 +287,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.pointer}
                   onChange={(e) => handleAdvancedOptionChange('pointer', e.target.value)}
                   placeholder="0"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="refundPointer">Refund Pointer:</label>
                 <input
                   type="number"
@@ -271,10 +299,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.refundPointer}
                   onChange={(e) => handleAdvancedOptionChange('refundPointer', e.target.value)}
                   placeholder="0"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="vout">Output Index (vout):</label>
                 <input
                   type="number"
@@ -282,10 +311,11 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                   value={advancedOptions.vout}
                   onChange={(e) => handleAdvancedOptionChange('vout', e.target.value)}
                   placeholder="0"
+                  style={{ width: '100%' }}
                 />
               </div>
               
-              <div className="form-group">
+              <div className="field-row-stacked" style={{ marginBottom: '16px' }}>
                 <label htmlFor="alkanes">Alkanes Array:</label>
                 <input
                   type="text"
@@ -300,43 +330,54 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
                     }
                   }}
                   placeholder="[]"
+                  style={{ width: '100%' }}
                 />
               </div>
             </div>
           )}
-        </div>
+        </fieldset>
         
-        <button type="submit" disabled={isLoading} className="submit-button">
-          {isLoading ? 'Simulating...' : 'Simulate Operation'}
-        </button>
+        <div className="field-row" style={{ marginTop: '16px' }}>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Simulating...' : 'Simulate Operation'}
+          </button>
+        </div>
       </form>
       
       {error && (
-        <div className="error-message">
-          <h3>Error</h3>
-          <p>{error}</p>
+        <div className="status-bar error" style={{ marginTop: '16px', color: 'red' }}>
+          <div className="status-bar-field">Error: {error}</div>
         </div>
       )}
       
       {isLoading && (
-        <div className="loading-message">
-          <p>Simulating operation... This may take a moment.</p>
+        <div className="status-bar" style={{ marginTop: '16px' }}>
+          <div className="status-bar-field">Simulating operation... This may take a moment.</div>
         </div>
       )}
       
       {results && !isLoading && (
-        <div className="results-container">
-          <h3>Simulation Results</h3>
+        <fieldset style={{ marginTop: '16px' }}>
+          <legend>Simulation Results</legend>
           
-          <div className="result-item">
-            <h4>Operation Status</h4>
-            <p className={`status ${results.status}`}>
+          <div className="field-row" style={{ marginBottom: '16px' }}>
+            <label>Operation Status:</label>
+            <div 
+              style={{ 
+                display: 'inline-block',
+                padding: '4px 8px',
+                backgroundColor: results.status === 'success' ? '#e6ffe6' : '#ffe6e6',
+                border: '1px solid',
+                borderColor: results.status === 'success' ? '#006600' : '#cc0000',
+                color: results.status === 'success' ? '#006600' : '#cc0000'
+              }}
+            >
               {results.status === 'success' ? 'Success' : 'Failed'}
-            </p>
+            </div>
           </div>
           
-          <div className="result-details">
-            <h4>Full Results</h4>
+          <div className="sunken-panel" style={{ padding: '8px', marginTop: '8px' }}>
+            <h4 style={{ marginBottom: '8px' }}>Full Results</h4>
             <TerminalCodeBlock
               code={JSON.stringify(results.data || results, null, 2)}
               language="json"
@@ -344,8 +385,15 @@ const SimulateForm = ({ endpoint = 'regtest' }) => {
               showLineNumbers={true}
             />
           </div>
-        </div>
+        </fieldset>
       )}
+      
+      <div className="status-bar" style={{ marginTop: '16px' }}>
+        <div className="status-bar-field">Network: {endpoint}</div>
+        <div className="status-bar-field">
+          {isLoading ? 'Simulating...' : 'Ready'}
+        </div>
+      </div>
       
       <style jsx>{`
         .simulation-form {
