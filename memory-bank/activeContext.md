@@ -6,7 +6,27 @@ The current focus is on implementing a URL-based network navigation structure to
 
 ## Recent Changes
 
-### 1. Network Navigation Architectural Analysis
+### 1. Explorer Pages Improvements and Issues
+
+We've been working on fixing issues with the `/explorer/2:n` pages, particularly focusing on pagination and filtering:
+
+- Updated the "Show unverified WASM contracts" checkbox:
+  - Changed the default state to `false` to initially filter out unverified WASM contracts
+  - Applied proper 98.css styling to the checkbox using the `field-row` and `checkbox` classes
+  - Implemented filtering logic to hide tokens with blank names by default
+
+- Attempted to fix pagination controls:
+  - Implemented a `hasMore` flag in the `useTokensWithCache` hook to determine if there are more pages
+  - Updated the Next button to use this flag instead of complex conditions
+  - Improved the caching strategy to use URL-friendly cache keys that match the page structure
+  - Enhanced the `getAllAlkanes` function to provide better pagination information
+
+- Encountered issues that still need resolution:
+  - The filtering functionality is not working correctly - toggling the checkbox to show unverified contracts doesn't display all missing tokens
+  - Results are being cut short for all tokens, affecting pagination
+  - Need to investigate if we should fetch all tokens first and then handle pagination client-side
+
+### 2. Network Navigation Architectural Analysis
 
 We've analyzed a critical race condition issue with the current network switching mechanism:
 - When users rapidly switch between networks (e.g., from mainnet to oylnet and back quickly), multiple asynchronous data fetching operations run concurrently

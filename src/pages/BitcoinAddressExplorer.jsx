@@ -710,80 +710,80 @@ const BitcoinAddressExplorer = () => {
   }, []);
   
   return (
-    <div style={styles.container} className="container">
-      <h2 style={styles.title}>Address Transaction Explorer</h2>
-      <p style={styles.description}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px' }}>
+      <h2>Address Transaction Explorer</h2>
+      <p style={{ marginBottom: '16px' }}>
         Explore transactions for an address across the {endpoint.toUpperCase()} network.
       </p>
       
-      <div style={styles.section}>
-        <form style={styles.form} onSubmit={handleSubmit}>
-          <div>
-            <label style={styles.label}>Address</label>
+      <fieldset>
+        <legend>Search</legend>
+        <form onSubmit={handleSubmit}>
+          <div className="field-row-stacked">
+            <label htmlFor="bitcoinAddress">Address:</label>
+            <input
+              id="bitcoinAddress"
+              type="text"
+              placeholder="Enter an address"
+              value={manualAddress}
+              onChange={(e) => setManualAddress(e.target.value)}
+              disabled={loading}
+              style={{ width: '100%' }}
+            />
+          </div>
+          
+          <div className="field-row" style={{ marginTop: '16px' }}>
+            <button
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Search'}
+            </button>
             
-            <div style={styles.formRow}>
-              <input
-                type="text"
-                style={styles.input}
-                placeholder="Enter an address"
-                value={manualAddress}
-                onChange={(e) => setManualAddress(e.target.value)}
-                disabled={loading}
-              />
-              
-              {connected && (
-                <button
-                  type="button"
-                  style={styles.secondaryButton}
-                  onClick={useConnectedWallet}
-                  disabled={loading || !walletAddress}
-                >
-                  Use Wallet
-                </button>
-              )}
-              
+            {connected && (
               <button
-                type="submit"
-                style={loading ? styles.disabledButton : styles.button}
-                disabled={loading}
+                type="button"
+                onClick={useConnectedWallet}
+                disabled={loading || !walletAddress}
               >
-                {loading ? 'Loading...' : 'Search'}
+                Use Wallet
               </button>
-            </div>
+            )}
           </div>
         </form>
-      </div>
+      </fieldset>
       
       {/* Results section */}
-      <div style={styles.section}>
-        <h3 style={styles.title}>Results</h3>
-        
-        {/* Show loading state */}
-        {loading && (
-          <div style={styles.loadingContainer}>
-            <div style={styles.spinner}></div>
-          </div>
-        )}
-        
-        {/* Show error state */}
-        {error && (
-          <div style={styles.errorContainer}>
-            <p style={styles.errorMessage}>{error}</p>
-            <button 
-              style={{...styles.secondaryButton, marginTop: '10px'}}
-              onClick={() => setError(null)}
-            >
-              Try Again
-            </button>
-          </div>
-        )}
-        
-        {/* Show empty state */}
-        {!loading && !error && transactions.length === 0 && (
-          <div style={styles.emptyStateContainer}>
-            <p style={styles.emptyStateMessage}>No transactions found for this address</p>
-          </div>
-        )}
+      {address && (
+        <fieldset style={{ marginTop: '16px' }}>
+          <legend>Results</legend>
+          
+          {/* Show loading state */}
+          {loading && (
+            <div className="status-bar">
+              <div className="status-bar-field">Loading transactions...</div>
+            </div>
+          )}
+          
+          {/* Show error state */}
+          {error && (
+            <div className="status-bar error" style={{ marginTop: '16px', color: 'red' }}>
+              <div className="status-bar-field">Error: {error}</div>
+              <button 
+                style={{ marginLeft: '10px' }}
+                onClick={() => setError(null)}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+          
+          {/* Show empty state */}
+          {!loading && !error && transactions.length === 0 && (
+            <div className="status-bar">
+              <div className="status-bar-field">No transactions found for this address</div>
+            </div>
+          )}
         
         {/* Show results table */}
         {!loading && !error && transactions.length > 0 && (
@@ -805,14 +805,16 @@ const BitcoinAddressExplorer = () => {
                       backgroundColor: index % 2 === 0 ? '#FFFFFF' : '#F5F5F5'
                     }}>
                       <td style={styles.tableCell}>
-                        <div style={styles.txidContainer}>
-                          {shortenTxid(tx.txid)}
+                        <div className="field-row" style={{ margin: 0 }}>
+                          <span className={`${styles.monospaceText}`}>
+                            {shortenTxid(tx.txid)}
+                          </span>
                           <button 
-                            style={styles.copyButton}
                             onClick={() => copyToClipboard(tx.txid)}
                             title="Copy TXID"
+                            style={{ marginLeft: '4px', padding: '2px 8px', fontSize: '12px' }}
                           >
-                            📋
+                            Copy
                           </button>
                         </div>
                       </td>
@@ -823,21 +825,25 @@ const BitcoinAddressExplorer = () => {
                         {tx.status && tx.status.block_time ? formatDate(tx.status.block_time) : 'Pending'}
                       </td>
                       <td style={styles.tableCell}>
-                        <button
-                          style={styles.actionButton}
-                          onClick={() => handleTraceTransaction(tx.txid)}
-                          disabled={traceLoading[tx.txid]}
-                        >
-                          {traceLoading[tx.txid] ? 'Tracing...' : 'Trace'}
-                        </button>
-                        <a
-                          href={`https://mempool.space/${endpoint === 'mainnet' ? '' : endpoint + '/'}tx/${tx.txid}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={styles.viewButton}
-                        >
-                          View
-                        </a>
+                        <div className="field-row" style={{ margin: 0, justifyContent: 'flex-end' }}>
+                          <button
+                            onClick={() => handleTraceTransaction(tx.txid)}
+                            disabled={traceLoading[tx.txid]}
+                            style={{ marginRight: '4px', padding: '2px 8px', fontSize: '12px' }}
+                          >
+                            {traceLoading[tx.txid] ? 'Tracing...' : 'Trace'}
+                          </button>
+                          <a
+                            href={`https://mempool.space/${endpoint === 'mainnet' ? '' : endpoint + '/'}tx/${tx.txid}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <button style={{ padding: '2px 8px', fontSize: '12px' }}>
+                              View
+                            </button>
+                          </a>
+                        </div>
                       </td>
                     </tr>
                     {expandedTxid === tx.txid && traceResults[tx.txid] && (
@@ -848,47 +854,57 @@ const BitcoinAddressExplorer = () => {
                               Trace Results
                             </h4>
                             
-                            {/* View Type Tabs */}
-                            <div style={styles.tabContainer}>
-                              <div
-                                style={{
-                                  ...styles.tab,
-                                  ...(activeView === 'digested' ? styles.activeTab : {})
-                                }}
-                                onClick={() => setActiveView('digested')}
-                              >
-                                Digested View
-                              </div>
-                              <div
-                                style={{
-                                  ...styles.tab,
-                                  ...(activeView === 'raw' ? styles.activeTab : {})
-                                }}
-                                onClick={() => setActiveView('raw')}
-                              >
-                                Raw View
+                            {/* Windows 98 style tab groups with labels */}
+                            <div style={{ marginBottom: '16px' }}>
+                              <div style={{ marginBottom: '4px', fontWeight: 'bold' }}>View Type:</div>
+                              <div className="field-row" style={{ margin: 0 }}>
+                                <button 
+                                  style={{ 
+                                    backgroundColor: activeView === 'digested' ? '#c0c0c0' : '',
+                                    fontWeight: activeView === 'digested' ? 'bold' : 'normal',
+                                    width: '120px'
+                                  }}
+                                  onClick={() => setActiveView('digested')}
+                                >
+                                  Digested View
+                                </button>
+                                <button 
+                                  style={{ 
+                                    backgroundColor: activeView === 'raw' ? '#c0c0c0' : '',
+                                    fontWeight: activeView === 'raw' ? 'bold' : 'normal',
+                                    width: '120px'
+                                  }}
+                                  onClick={() => setActiveView('raw')}
+                                >
+                                  Raw View
+                                </button>
                               </div>
                             </div>
                             
-                            {/* Vout Tabs - Show for both views */}
-                            <div style={styles.tabContainer}>
-                              <div
-                                style={{
-                                  ...styles.tab,
-                                  ...(activeVout === 4 ? styles.activeTab : {})
-                                }}
-                                onClick={() => setActiveVout(4)}
-                              >
-                                Vout 4
-                              </div>
-                              <div
-                                style={{
-                                  ...styles.tab,
-                                  ...(activeVout === 5 ? styles.activeTab : {})
-                                }}
-                                onClick={() => setActiveVout(5)}
-                              >
-                                Vout 5
+                            {/* Vout selection */}
+                            <div style={{ marginBottom: '16px' }}>
+                              <div style={{ marginBottom: '4px', fontWeight: 'bold' }}>Output:</div>
+                              <div className="field-row" style={{ margin: 0 }}>
+                                <button 
+                                  style={{ 
+                                    backgroundColor: activeVout === 4 ? '#c0c0c0' : '',
+                                    fontWeight: activeVout === 4 ? 'bold' : 'normal',
+                                    width: '120px'
+                                  }}
+                                  onClick={() => setActiveVout(4)}
+                                >
+                                  Vout 4
+                                </button>
+                                <button 
+                                  style={{ 
+                                    backgroundColor: activeVout === 5 ? '#c0c0c0' : '',
+                                    fontWeight: activeVout === 5 ? 'bold' : 'normal',
+                                    width: '120px'
+                                  }}
+                                  onClick={() => setActiveVout(5)}
+                                >
+                                  Vout 5
+                                </button>
                               </div>
                             </div>
                             
@@ -924,66 +940,76 @@ const BitcoinAddressExplorer = () => {
                                       const hasStorage = digestedData.summary.storage && digestedData.summary.storage.length > 0;
                                       
                                       return (
-                                        <div style={{ fontFamily: 'Roboto Mono, monospace' }}>
+                                        <div>
                                           {/* Content Tabs */}
-                                          <div style={styles.tabContainer}>
-                                            <div
-                                              style={{
-                                                ...styles.tab,
-                                                ...(activeTab === 'general' ? styles.activeTab : {})
-                                              }}
-                                              onClick={() => setActiveTab('general')}
-                                            >
-                                              General
+                                          <div style={{ marginBottom: '16px' }}>
+                                            <div style={{ marginBottom: '4px', fontWeight: 'bold' }}>Content:</div>
+                                            <div className="field-row" style={{ margin: 0, flexWrap: 'wrap' }}>
+                                              <button
+                                                style={{ 
+                                                  backgroundColor: activeTab === 'general' ? '#c0c0c0' : '',
+                                                  fontWeight: activeTab === 'general' ? 'bold' : 'normal',
+                                                  width: '100px',
+                                                  margin: '2px'
+                                                }}
+                                                onClick={() => setActiveTab('general')}
+                                              >
+                                                General
+                                              </button>
+                                              {hasInputs && (
+                                                <button
+                                                  style={{ 
+                                                    backgroundColor: activeTab === 'inputs' ? '#c0c0c0' : '',
+                                                    fontWeight: activeTab === 'inputs' ? 'bold' : 'normal',
+                                                    width: '100px',
+                                                    margin: '2px'
+                                                  }}
+                                                  onClick={() => setActiveTab('inputs')}
+                                                >
+                                                  Inputs
+                                                </button>
+                                              )}
+                                              {hasAlkanes && (
+                                                <button
+                                                  style={{ 
+                                                    backgroundColor: activeTab === 'alkanes' ? '#c0c0c0' : '',
+                                                    fontWeight: activeTab === 'alkanes' ? 'bold' : 'normal',
+                                                    width: '100px',
+                                                    margin: '2px'
+                                                  }}
+                                                  onClick={() => setActiveTab('alkanes')}
+                                                >
+                                                  Alkanes
+                                                </button>
+                                              )}
+                                              {hasStorage && (
+                                                <button
+                                                  style={{ 
+                                                    backgroundColor: activeTab === 'storage' ? '#c0c0c0' : '',
+                                                    fontWeight: activeTab === 'storage' ? 'bold' : 'normal',
+                                                    width: '100px',
+                                                    margin: '2px'
+                                                  }}
+                                                  onClick={() => setActiveTab('storage')}
+                                                >
+                                                  Storage
+                                                </button>
+                                              )}
                                             </div>
-                                            {hasInputs && (
-                                              <div
-                                                style={{
-                                                  ...styles.tab,
-                                                  ...(activeTab === 'inputs' ? styles.activeTab : {})
-                                                }}
-                                                onClick={() => setActiveTab('inputs')}
-                                              >
-                                                Inputs
-                                              </div>
-                                            )}
-                                            {hasAlkanes && (
-                                              <div
-                                                style={{
-                                                  ...styles.tab,
-                                                  ...(activeTab === 'alkanes' ? styles.activeTab : {})
-                                                }}
-                                                onClick={() => setActiveTab('alkanes')}
-                                              >
-                                                Alkanes
-                                              </div>
-                                            )}
-                                            {hasStorage && (
-                                              <div
-                                                style={{
-                                                  ...styles.tab,
-                                                  ...(activeTab === 'storage' ? styles.activeTab : {})
-                                                }}
-                                                onClick={() => setActiveTab('storage')}
-                                              >
-                                                Storage
-                                              </div>
-                                            )}
                                           </div>
                                           
                                           {/* General Tab Content */}
                                           {activeTab === 'general' && (
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-                                              {/* Transaction Status */}
-                                              <div style={{ flex: '1 0 45%', minWidth: '200px' }}>
-                                                <h5 style={{ marginBottom: '5px' }}>Transaction Status</h5>
+                                            <div className="sunken-panel" style={{ padding: '8px', marginTop: '8px' }}>
+                                              <div className="field-row-stacked" style={{ marginBottom: '8px' }}>
+                                                <label>Transaction Status:</label>
                                                 <div style={{
                                                   display: 'inline-block',
                                                   padding: '4px 8px',
-                                                  backgroundColor: digestedData.summary.return?.statusColor || '#F5F5F5',
-                                                  color: '#FFFFFF',
-                                                  borderRadius: '4px',
-                                                  fontWeight: 'bold'
+                                                  backgroundColor: digestedData.summary.return?.status === 'success' ? '#e6ffe6' : '#ffe6e6',
+                                                  border: '1px solid',
+                                                  borderColor: digestedData.summary.return?.status === 'success' ? '#006600' : '#cc0000',
+                                                  color: digestedData.summary.return?.status === 'success' ? '#006600' : '#cc0000'
                                                 }}>
                                                   {digestedData.summary.return?.status || 'Unknown'}
                                                 </div>
@@ -991,20 +1017,19 @@ const BitcoinAddressExplorer = () => {
                                               
                                               {/* Fuel Information */}
                                               {digestedData.summary.invoke?.fuel && (
-                                                <div style={{ flex: '1 0 45%', minWidth: '200px' }}>
-                                                  <h5 style={{ marginBottom: '5px' }}>Fuel</h5>
-                                                  <div>
-                                                    <span style={{ fontWeight: 'bold' }}>Value: </span>
-                                                    {digestedData.summary.invoke.fuel}
-                                                  </div>
+                                                <div className="field-row" style={{ marginBottom: '8px' }}>
+                                                  <label>Fuel Value:</label>
+                                                  <span>{digestedData.summary.invoke.fuel}</span>
                                                 </div>
                                               )}
                                               
                                               {/* Data */}
                                               {digestedData.summary.data && (
-                                                <div style={{ flex: '1 0 100%' }}>
-                                                  <h5 style={{ marginBottom: '5px' }}>Data</h5>
-                                                  <div>{digestedData.summary.data}</div>
+                                                <div className="field-row-stacked" style={{ marginBottom: '8px' }}>
+                                                  <label>Data:</label>
+                                                  <div className="sunken-panel" style={{ padding: '4px' }}>
+                                                    {digestedData.summary.data}
+                                                  </div>
                                                 </div>
                                               )}
                                             </div>
@@ -1012,47 +1037,45 @@ const BitcoinAddressExplorer = () => {
                                           
                                           {/* Inputs Tab Content */}
                                           {activeTab === 'inputs' && hasInputs && (
-                                            <div>
-                                              <h5 style={{ marginBottom: '5px' }}>Inputs</h5>
-                                              <div style={{
-                                                maxHeight: '200px',
-                                                overflow: 'auto',
-                                                border: '1px solid #E0E0E0',
-                                                padding: '8px',
-                                                borderRadius: '4px'
-                                              }}>
-                                                <div style={{
-                                                  display: 'grid',
-                                                  gridTemplateColumns: `repeat(${digestedData.summary.invoke.inputs.length}, minmax(30px, 1fr))`,
-                                                  gap: '5px'
+                                            <div className="sunken-panel" style={{ padding: '8px', marginTop: '8px' }}>
+                                              <div className="field-row-stacked">
+                                                <label>Inputs:</label>
+                                                <div className="sunken-panel" style={{ 
+                                                  maxHeight: '200px', 
+                                                  overflow: 'auto',
+                                                  padding: '8px'
                                                 }}>
-                                                  {/* Header row with indices */}
-                                                  {digestedData.summary.invoke.inputs.map((_, index) => (
-                                                    <div key={`header-${index}`} style={{
-                                                      textAlign: 'center',
-                                                      fontWeight: 'bold',
-                                                      padding: '4px',
-                                                      backgroundColor: '#F5F5F5',
-                                                      borderRadius: '4px'
-                                                    }}>
-                                                      {index}
-                                                    </div>
-                                                  ))}
-                                                  
-                                                  {/* Value row */}
-                                                  {digestedData.summary.invoke.inputs.map((input, index) => (
-                                                    <div key={`value-${index}`} style={{
-                                                      textAlign: 'center',
-                                                      padding: '4px',
-                                                      backgroundColor: '#FFFFFF',
-                                                      border: '1px solid #E0E0E0',
-                                                      borderRadius: '4px',
-                                                      overflow: 'hidden',
-                                                      textOverflow: 'ellipsis'
-                                                    }}>
-                                                      {input}
-                                                    </div>
-                                                  ))}
+                                                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                                    <thead>
+                                                      <tr>
+                                                        {digestedData.summary.invoke.inputs.map((_, index) => (
+                                                          <th key={`header-${index}`} style={{
+                                                            textAlign: 'center',
+                                                            padding: '4px',
+                                                            backgroundColor: '#c0c0c0',
+                                                            border: '1px solid #808080'
+                                                          }}>
+                                                            {index}
+                                                          </th>
+                                                        ))}
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr>
+                                                        {digestedData.summary.invoke.inputs.map((input, index) => (
+                                                          <td key={`value-${index}`} style={{
+                                                            textAlign: 'center',
+                                                            padding: '4px',
+                                                            border: '1px solid #c0c0c0',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis'
+                                                          }}>
+                                                            {input}
+                                                          </td>
+                                                        ))}
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
                                                 </div>
                                               </div>
                                             </div>
@@ -1060,27 +1083,26 @@ const BitcoinAddressExplorer = () => {
                                           
                                           {/* Alkanes Tab Content */}
                                           {activeTab === 'alkanes' && hasAlkanes && (
-                                            <div>
-                                              <h5 style={{ marginBottom: '5px' }}>Alkanes</h5>
-                                              <div style={{
-                                                maxHeight: '200px',
-                                                overflow: 'auto',
-                                                border: '1px solid #E0E0E0',
-                                                padding: '8px',
-                                                borderRadius: '4px'
-                                              }}>
-                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                                            <div className="sunken-panel" style={{ padding: '8px', marginTop: '8px' }}>
+                                              <div className="field-row-stacked">
+                                                <label>Alkanes:</label>
+                                                <div className="sunken-panel" style={{ 
+                                                  maxHeight: '200px', 
+                                                  overflow: 'auto',
+                                                  padding: '8px'
+                                                }}>
                                                   {digestedData.summary.alkanes.map((alkane, index) => (
-                                                    <div key={index} style={{
-                                                      flex: '1 0 45%',
-                                                      minWidth: '200px',
-                                                      padding: '8px',
-                                                      backgroundColor: '#F5F5F5',
-                                                      borderRadius: '4px'
-                                                    }}>
-                                                      <div><span style={{ fontWeight: 'bold' }}>alkaneId: </span>{alkane.alkaneId}</div>
-                                                      <div><span style={{ fontWeight: 'bold' }}>Value: </span>{alkane.value}</div>
-                                                    </div>
+                                                    <fieldset key={index} style={{ marginBottom: '8px' }}>
+                                                      <legend>Token {index + 1}</legend>
+                                                      <div className="field-row">
+                                                        <label>ID:</label>
+                                                        <span>{alkane.alkaneId}</span>
+                                                      </div>
+                                                      <div className="field-row">
+                                                        <label>Value:</label>
+                                                        <span>{alkane.value}</span>
+                                                      </div>
+                                                    </fieldset>
                                                   ))}
                                                 </div>
                                               </div>
@@ -1089,28 +1111,54 @@ const BitcoinAddressExplorer = () => {
                                           
                                           {/* Storage Tab Content */}
                                           {activeTab === 'storage' && hasStorage && (
-                                            <div>
-                                              <h5 style={{ marginBottom: '5px' }}>Storage</h5>
-                                              <div style={{
-                                                maxHeight: '200px',
-                                                overflow: 'auto',
-                                                border: '1px solid #E0E0E0',
-                                                padding: '8px',
-                                                borderRadius: '4px'
-                                              }}>
-                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-                                                  {digestedData.summary.storage.map((item, index) => (
-                                                    <div key={index} style={{
-                                                      flex: '1 0 45%',
-                                                      minWidth: '200px',
-                                                      padding: '8px',
-                                                      backgroundColor: '#F5F5F5',
-                                                      borderRadius: '4px'
-                                                    }}>
-                                                      <div><span style={{ fontWeight: 'bold' }}>Key: </span>{item.key}</div>
-                                                      <div><span style={{ fontWeight: 'bold' }}>Value: </span>{item.value}</div>
-                                                    </div>
-                                                  ))}
+                                            <div className="sunken-panel" style={{ padding: '8px', marginTop: '8px' }}>
+                                              <div className="field-row-stacked">
+                                                <label>Storage:</label>
+                                                <div className="sunken-panel" style={{ 
+                                                  maxHeight: '200px', 
+                                                  overflow: 'auto',
+                                                  padding: '8px'
+                                                }}>
+                                                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                                    <thead>
+                                                      <tr>
+                                                        <th style={{
+                                                          textAlign: 'left',
+                                                          padding: '4px',
+                                                          backgroundColor: '#c0c0c0',
+                                                          border: '1px solid #808080'
+                                                        }}>
+                                                          Key
+                                                        </th>
+                                                        <th style={{
+                                                          textAlign: 'left',
+                                                          padding: '4px',
+                                                          backgroundColor: '#c0c0c0',
+                                                          border: '1px solid #808080'
+                                                        }}>
+                                                          Value
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      {digestedData.summary.storage.map((item, index) => (
+                                                        <tr key={index}>
+                                                          <td style={{
+                                                            padding: '4px',
+                                                            border: '1px solid #c0c0c0'
+                                                          }}>
+                                                            {item.key}
+                                                          </td>
+                                                          <td style={{
+                                                            padding: '4px',
+                                                            border: '1px solid #c0c0c0'
+                                                          }}>
+                                                            {item.value}
+                                                          </td>
+                                                        </tr>
+                                                      ))}
+                                                    </tbody>
+                                                  </table>
                                                 </div>
                                               </div>
                                             </div>
@@ -1165,6 +1213,14 @@ const BitcoinAddressExplorer = () => {
             )}
           </>
         )}
+        </fieldset>
+      )}
+      
+      <div className="status-bar" style={{ marginTop: '16px' }}>
+        <div className="status-bar-field">Network: {endpoint}</div>
+        <div className="status-bar-field">
+          {loading ? 'Searching...' : pageLoading ? 'Loading page...' : 'Ready'}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,16 @@
+/* NavSidebar Styles */
+
+.nav-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.nav-link:visited {
+  color: purple;
+}
+
+.nav-link.active {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}

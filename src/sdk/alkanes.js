@@ -290,7 +290,7 @@ export const getAllAlkanes = async (limit, offset = 0, endpoint = 'regtest') => 
     
     // Transform tokens to a consistent format and filter out tokens with invalid names
     const transformedTokens = result
-      .filter(token => token.name) // Skip tokens with no name
+      //.filter(token => token.name) // Skip tokens with no name
       .map(token => ({
         // Core token details
         id: token.id || { block: '', tx: '' },
@@ -310,10 +310,12 @@ export const getAllAlkanes = async (limit, offset = 0, endpoint = 'regtest') => 
         // For consistent API response structure
         amount: 0 // Default to 0 as this isn't an address-specific balance
       }));
+      
     // Calculate a better estimation of total tokens for pagination
-    // If we received a full page of tokens, assume there are more
+    // If we got a full page, assume there are more tokens
+    // If we got a partial page, assume that's all there is
     const estimatedTotal = transformedTokens.length >= limit
-      ? Math.max(1000, offset + transformedTokens.length * 2) // Use a larger value when we hit the limit
+      ? Math.max(offset + transformedTokens.length * 2, offset + transformedTokens.length + 1) // Ensure at least one more page
       : offset + transformedTokens.length;
       
     // Return in a consistent format with other API functions
@@ -323,7 +325,8 @@ export const getAllAlkanes = async (limit, offset = 0, endpoint = 'regtest') => 
       pagination: {
         limit,
         offset,
-        total: estimatedTotal // Use our estimated total instead of just the current page count
+        total: estimatedTotal, // Use our estimated total instead of just the current page count
+        hasMore: transformedTokens.length >= limit // Flag to indicate if there are more tokens
       },
       tokens: transformedTokens
     };

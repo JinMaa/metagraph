@@ -2,10 +2,10 @@ import React from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 
 /**
- * Home Page Component (98.css version)
+ * Home Page Component
  *
  * The main landing page for the METAGRAPH application
- * Displays categories of API methods and explorer links using 98.css group boxes.
+ * Displays categories of API methods and explorer links using group boxes.
  */
 const Home = () => {
   const { endpoint = 'mainnet' } = useOutletContext() || {}; // Endpoint context might be useful later
@@ -13,8 +13,8 @@ const Home = () => {
   return (
     // Main container div (no special styling needed here)
     <div>
-      <h2>Welcome to METAGRAPH (Win98 Edition)</h2>
-      <p>An interactive playground for Alkanes metaprotocol and Sandshrew API methods, styled with 98.css.</p>
+      <h2>Welcome to METAGRAPH</h2>
+      <p>An interactive playground for Alkanes metaprotocol and Sandshrew API methods.</p>
 
       {/* Use flexbox for simple two-column layout */}
       <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
@@ -51,7 +51,7 @@ const Home = () => {
           {/* List of explorer links */}
           <div style={{ marginBottom: '8px' }}>
              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link to="/explorer/alkanes-tokens">/explorer/alkanes-tokens</Link>
+                <Link to="/explorer/2:n">/explorer/2:n</Link>
                 <span style={{ fontSize: '11px', color: '#555' }}>[2,n]</span>
              </div>
             <p style={{ marginTop: '2px', fontSize: '11px', color: '#555' }}>
