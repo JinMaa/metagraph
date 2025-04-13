@@ -504,17 +504,16 @@ export const getProtorunesByOutpoint = async (params, height, endpoint = 'regtes
       throw new Error('Invalid height: must be a number');
     }
     
-    // Reverse the txid for the API call
-    // This converts from the standard display format to the internal byte order
-    const reversedTxid = params.txid
-      .match(/.{2}/g)
-      ?.reverse()
-      .join('') || params.txid;
+    // The txid in the example is already in the correct format for the API call
+    // No need to reverse it as the form already shows the correct format
+    const txidForApi = params.txid;
     
     // Determine the API URL based on the endpoint
     const url = endpoint === 'mainnet' ? 'https://mainnet.sandshrew.io/v2/lasereyes' :
                 endpoint === 'oylnet' ? 'https://oylnet.oyl.gg/v2/lasereyes' :
                 'http://localhost:18888/v1/lasereyes';
+    
+    console.log(`Making API call to ${url} with txid: ${txidForApi}, vout: ${params.vout}, height: ${height}`);
     
     // Make the JSON-RPC request
     const response = await fetch(url, {
@@ -529,7 +528,7 @@ export const getProtorunesByOutpoint = async (params, height, endpoint = 'regtes
         params: [
           {
             protocolTag: params.protocolTag || '1',
-            txid: reversedTxid,
+            txid: txidForApi,
             vout: parseInt(params.vout, 10)
           },
           parseInt(height, 10)
