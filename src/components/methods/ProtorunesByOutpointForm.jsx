@@ -26,10 +26,10 @@ const ProtorunesByOutpointForm = ({ endpoint = 'mainnet' }) => {
     {
       name: 'txid',
       label: 'Transaction ID',
-      placeholder: '64c85a06ca2ac0e2d3bb7dc3f1a69a83c0fb23f11638c45d250633f20bb0dc06',
+      placeholder: '06dcb00bf23306255dc43816f123fbc0839aa6f1c37dbbd3e2c02aca065ac864',
       description: () => (
         <span>
-          The transaction ID to query. <strong>Important:</strong> The txid will be reversed internally when making the API call. The txid you enter should be in the standard display format as seen on block explorers. View example transaction on <a
+          The transaction ID to query. <strong>Important:</strong> The txid should be in the byte-reversed format as shown in the example below (starting with "06" not "64"). This is different from how it appears on block explorers. View the original transaction on <a
             href="https://mempool.space/tx/64c85a06ca2ac0e2d3bb7dc3f1a69a83c0fb23f11638c45d250633f20bb0dc06"
             target="_blank"
             rel="noopener noreferrer"
@@ -117,7 +117,7 @@ const ProtorunesByOutpointForm = ({ endpoint = 'mainnet' }) => {
   ]
 }' https://mainnet.sandshrew.io/v2/lasereyes`
       }}
-      notes="Note that the txid in the API call is reversed compared to how it appears in block explorers. The implementation handles this reversal internally, so you should enter the txid as it appears in block explorers. The protocol tag defaults to '1' but can be changed for different protocols. Ensure the txid, vout, and height correspond to a valid transaction on the current network.
+      notes="Note that the txid in the API call must be in byte-reversed format (as shown in the example), which is different from how it appears in block explorers. You need to manually reverse the byte order of the txid when entering it in this form. The protocol tag defaults to '1' but can be changed for different protocols. Ensure the txid, vout, and height correspond to a valid transaction on the current network.
 
 Important information about the response format:
 - Token IDs are provided in hex format (e.g., block: '0x2', tx: '0x10'), which correspond to decimal values 2 and 16, giving an alkane ID of [2,16]

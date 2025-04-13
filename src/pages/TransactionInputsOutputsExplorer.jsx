@@ -110,6 +110,12 @@ const TransactionInputsOutputsExplorer = () => {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   };
   
+  // Get mempool.space URL for transaction
+  const getMempoolSpaceUrl = (txid) => {
+    if (!txid) return '#';
+    return `https://mempool.space/tx/${txid}`;
+  };
+  
   // Helper function to convert hex to decimal
   const hexToDec = (hexString) => {
     if (!hexString || typeof hexString !== 'string') return 'N/A';
@@ -632,7 +638,12 @@ const TransactionInputsOutputsExplorer = () => {
               </div>
               
               {getCurrentPageTransactions().map((tx, index) => (
-                <fieldset key={tx.txid} style={{ marginBottom: '16px' }}>
+                <fieldset key={tx.txid} style={{ 
+                  marginBottom: '24px', 
+                  border: '2px solid #c0c0c0',
+                  borderRadius: '4px',
+                  padding: '16px'
+                }}>
                   <legend>Transaction {index + 1}</legend>
                     
                     <div className="field-row" style={{ marginBottom: '8px' }}>
@@ -651,9 +662,20 @@ const TransactionInputsOutputsExplorer = () => {
                       <span>{formatDate(tx.status?.block_time)}</span>
                     </div>
                     
+                    <div className="field-row" style={{ marginBottom: '8px' }}>
+                      <label>Block Height:</label>
+                      <span>{tx.status?.block_height || 'Unconfirmed'}</span>
+                    </div>
+                    
                     <div className="field-row" style={{ marginBottom: '8px', justifyContent: 'space-between' }}>
                       <span>Inputs & Outputs</span>
-                      <button>Details</button>
+                      <a 
+                        href={getMempoolSpaceUrl(tx.txid)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <button>Details</button>
+                      </a>
                     </div>
                     
                     <div style={{ display: 'flex', gap: '16px' }}>
@@ -661,7 +683,7 @@ const TransactionInputsOutputsExplorer = () => {
                       <div style={{ flex: 1 }}>
                         <fieldset>
                           <legend>Inputs</legend>
-                          <div className="sunken-panel" style={{ maxHeight: '200px', overflow: 'auto' }}>
+                          <div className="sunken-panel">
                             {tx.inputs.map((input, i) => (
                               <div key={i} className="field-row" style={{ margin: '4px 0', padding: '4px', border: '1px solid #c0c0c0' }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -696,7 +718,7 @@ const TransactionInputsOutputsExplorer = () => {
                       <div style={{ flex: 1 }}>
                         <fieldset>
                           <legend>Outputs</legend>
-                          <div className="sunken-panel" style={{ maxHeight: '200px', overflow: 'auto' }}>
+                          <div className="sunken-panel">
                             {tx.outputs.map((output, i) => (
                               <div key={i} className="field-row" style={{ margin: '4px 0', padding: '4px', border: '1px solid #c0c0c0' }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
