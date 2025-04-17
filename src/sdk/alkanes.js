@@ -487,6 +487,228 @@ export const getAlkanesByHeight = async (height, endpoint = 'regtest') => {
  * @param {string} endpoint - API endpoint to use ('regtest', 'mainnet', 'oylnet')
  * @returns {Promise<Object>} - Protorunes at the specified outpoint and height
  */
+/**
+ * Helper function to make JSON-RPC requests
+ * @param {string} endpoint - API endpoint to use ('regtest', 'mainnet', 'oylnet')
+ * @param {string} method - JSON-RPC method to call
+ * @param {Array} params - Parameters for the method
+ * @returns {Promise<Object>} - JSON-RPC response
+ */
+const fetchJsonRpc = async (endpoint, method, params) => {
+  const url = endpoint === 'mainnet' ? 'https://mainnet.sandshrew.io/v2/lasereyes' :
+              endpoint === 'oylnet' ? 'https://oylnet.oyl.gg/v2/lasereyes' :
+              'http://localhost:18888/v1/lasereyes';
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        id: 1,
+        method,
+        params
+      })
+    });
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error making JSON-RPC request to ${method}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Traces all transactions in a block and identifies Alkanes transactions
+ * @param {string|number} blockHeight - Block height to trace
+ * @param {string} endpoint - API endpoint to use ('regtest', 'mainnet', 'oylnet')
+ * @param {function} progressCallback - Callback function for progress updates
+ * @returns {Promise<Object>} - Block trace results with Alkanes information
+ */
+export const traceBlockAlkanes = async (blockHeight, endpoint = 'regtest', progressCallback = null) => {
+  try {
+    console.log(`Tracing block at height ${blockHeight} with ${endpoint} endpoint`);
+    
+    // Step 1: Get block hash from height
+    const blockHashResult = await fetchJsonRpc(endpoint, 'esplora_block-height', [blockHeight.toString()]);
+    if (!blockHashResult || blockHashResult.error) {
+      throw new Error(`Failed to get block hash: ${blockHashResult?.error?.message || 'Unknown error'}`);
+    }
+    const blockHash = blockHashResult.result;
+    
+    // Step 2: Get block details
+    const blockDetailsResult = await fetchJsonRpc(endpoint, 'esplora_block', [blockHash]);
+    if (!blockDetailsResult || blockDetailsResult.error) {
+      throw new Error(`Failed to get block details: ${blockDetailsResult?.error?.message || 'Unknown error'}`);
+    }
+    const blockDetails = blockDetailsResult.result;
+    
+    // Step 3: Get transaction IDs in order
+    const txidsResult = await fetchJsonRpc(endpoint, 'esplora_block::txids', [blockHash]);
+    if (!txidsResult || txidsResult.error) {
+      throw new Error(`Failed to get transaction IDs: ${txidsResult?.error?.message || 'Unknown error'}`);
+    }
+    const txids = txidsResult.result;
+    
+    // Step 4: Process transactions in parallel for better performance
+    console.log(`Processing ${txids.length} transactions in parallel`);
+    
+    // Create a function to process a single transaction
+    const processTransaction = async (txid, txIndex) => {
+      try {
+        // Get transaction details
+        const txDetailsResult = await fetchJsonRpc(endpoint, 'esplora_tx', [txid]);
+        if (!txDetailsResult || txDetailsResult.error) {
+          throw new Error(`Failed to get transaction details: ${txDetailsResult?.error?.message || 'Unknown error'}`);
+        }
+        const txDetails = txDetailsResult.result;
+        
+        // Check if transaction has OP_RETURN outputs
+        const opReturnOutputs = txDetails.vout.filter(output => output.scriptpubkey_type === 'op_return');
+        const hasOpReturn = opReturnOutputs.length > 0;
+        
+        // If no OP_RETURN outputs, skip tracing
+        if (!hasOpReturn) {
+          return {
+            txid,
+            txIndex,
+            hasOpReturn: false,
+            hasAlkanes: false,
+            traceStatus: 'skipped',
+            traceReason: 'No OP_RETURN outputs found'
+          };
+        }
+        
+        // Determine max output index
+        // We only consider outputs (vout), not inputs (vin)
+        // And we count OP_RETURN as an output
+        const maxOutputIndex = txDetails.vout.length - 1;
+        
+        // Run trace on output n+1 (shadow vout)
+        // This is where Alkanes operations are stored in the "shadow vout" range
+        const shadowVout = maxOutputIndex + 1;
+        console.log(`Running trace on transaction ${txid} at output index ${shadowVout} (shadow vout)`);
+        
+        const traceResult = await traceTransaction(txid, shadowVout, endpoint);
+        
+        // Check if trace result indicates Alkanes
+        const hasAlkanes = traceResult.status === 'success' && 
+                          traceResult.result && 
+                          traceResult.result.some(event => 
+                            event.event === 'return' && 
+                            event.data && 
+                            event.data.response && 
+                            event.data.response.alkanes);
+        
+        // Extract event information
+        let eventType = null;
+        let eventStatus = null;
+        let eventData = null;
+        
+        if (traceResult.status === 'success' && traceResult.result) {
+          const returnEvent = traceResult.result.find(event => event.event === 'return');
+          if (returnEvent) {
+            eventType = 'return';
+            eventStatus = returnEvent.data?.status || 'unknown';
+            eventData = returnEvent.data;
+          } else {
+            const createEvent = traceResult.result.find(event => event.event === 'create');
+            if (createEvent) {
+              eventType = 'create';
+              eventStatus = 'success';
+              eventData = createEvent.data;
+            } else {
+              const invokeEvent = traceResult.result.find(event => event.event === 'invoke');
+              if (invokeEvent) {
+                eventType = 'invoke';
+                eventStatus = 'success';
+                eventData = invokeEvent.data;
+              }
+            }
+          }
+        }
+        
+        return {
+          txid,
+          txIndex,
+          hasOpReturn: true,
+          hasAlkanes,
+          traceStatus: traceResult.status,
+          traceResult: traceResult.result,
+          eventType,
+          eventStatus,
+          eventData
+        };
+        
+      } catch (error) {
+        console.error(`Error processing transaction ${txid}:`, error);
+        return {
+          txid,
+          txIndex,
+          hasOpReturn: false,
+          hasAlkanes: false,
+          traceStatus: 'error',
+          traceError: error.message
+        };
+      }
+    };
+    
+    // Create an array of promises for all transactions
+    const transactionPromises = txids.map((txid, index) => processTransaction(txid, index));
+    
+    // Process transactions in batches to avoid overwhelming the API
+    // and to provide progress updates
+    const batchSize = 10; // Process 10 transactions at a time
+    const transactions = [];
+    
+    for (let i = 0; i < transactionPromises.length; i += batchSize) {
+      const batch = transactionPromises.slice(i, i + batchSize);
+      const batchResults = await Promise.all(batch);
+      transactions.push(...batchResults);
+      
+      // Update progress
+      if (progressCallback) {
+        progressCallback({
+          current: Math.min(i + batchSize, txids.length),
+          total: txids.length,
+          percentage: Math.round(Math.min(i + batchSize, txids.length) / txids.length * 100)
+        });
+      }
+    }
+    
+    // Sort transactions by their original index to maintain order
+    transactions.sort((a, b) => a.txIndex - b.txIndex);
+    
+    // Step 5: Return structured results
+    return {
+      status: 'success',
+      message: 'Block trace completed',
+      blockHeight,
+      blockHash,
+      blockDetails,
+      transactions,
+      summary: {
+        total: transactions.length,
+        withOpReturn: transactions.filter(tx => tx.hasOpReturn).length,
+        withAlkanes: transactions.filter(tx => tx.hasAlkanes).length,
+        successful: transactions.filter(tx => tx.traceStatus === 'success').length,
+        errors: transactions.filter(tx => tx.traceStatus === 'error').length,
+        skipped: transactions.filter(tx => tx.traceStatus === 'skipped').length
+      }
+    };
+    
+  } catch (error) {
+    console.error('Error tracing block for Alkanes:', error);
+    return {
+      status: 'error',
+      message: error.message || 'Unknown error',
+      blockHeight
+    };
+  }
+};
+
 export const getProtorunesByOutpoint = async (params, height, endpoint = 'regtest') => {
   try {
     console.log(`Getting Protorunes by outpoint ${params.txid}:${params.vout} at height ${height} with ${endpoint} endpoint`);

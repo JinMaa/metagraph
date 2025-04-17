@@ -121,6 +121,18 @@ const NavSidebar = () => {
             
             <div>
               <Link 
+                to="/explorer/alkanes-block"
+                className={`nav-link ${isActive('/explorer/alkanes-block') ? 'active' : ''}`}
+              >
+                /explorer/alkanes-block
+              </Link>
+              <p style={{ marginTop: '2px', fontSize: '11px', color: '#555' }}>
+                Explore Alkanes transactions in blocks
+              </p>
+            </div>
+            
+            <div>
+              <Link 
                 to="/explorer/address"
                 className={`nav-link ${isActive('/explorer/address') ? 'active' : ''}`}
               >

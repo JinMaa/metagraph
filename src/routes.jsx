@@ -9,6 +9,7 @@ import AlkanesBalanceExplorer from './pages/AlkanesBalanceExplorer';
 import AlkanesTokensExplorer from './pages/AlkanesTokensExplorer';
 import AlkanesTokenView from './pages/AlkanesTokenView';
 import AlkanesTemplatesExplorer from './pages/AlkanesTemplatesExplorer';
+import AlkanesBlockExplorer from './pages/AlkanesBlockExplorer';
 import BitcoinAddressExplorer from './pages/BitcoinAddressExplorer';
 import TransactionInputsOutputsExplorer from './pages/TransactionInputsOutputsExplorer';
 import TraceBlockStatusForm from './components/methods/TraceBlockStatusForm';
@@ -72,11 +73,6 @@ const router = createBrowserRouter([
         path: 'explorer/alkanes-tokens',
         element: <AlkanesTokensExplorer />
       },
-      // Use a wildcard route for all explorer pages
-      {
-        path: 'explorer/*',
-        element: <AlkanesTokensExplorer />
-      },
       {
         path: 'explorer/alkanes-templates',
         element: <AlkanesTemplatesExplorer />
@@ -86,12 +82,21 @@ const router = createBrowserRouter([
         element: <AlkanesBalanceExplorer />
       },
       {
+        path: 'explorer/alkanes-block',
+        element: <AlkanesBlockExplorer />
+      },
+      {
         path: 'explorer/address',
         element: <BitcoinAddressExplorer />
       },
       {
         path: 'explorer/transaction-io',
         element: <TransactionInputsOutputsExplorer />
+      },
+      // Use a wildcard route for all explorer pages
+      {
+        path: 'explorer/*',
+        element: <AlkanesTokensExplorer />
       },
       // Not found route
       {
