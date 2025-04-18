@@ -14,7 +14,7 @@ const networks = {
   mainnet: {
     url: 'https://mainnet.sandshrew.io',
     version: 'v2',
-    projectId: import.meta.env.VITE_SANDSHREW_PROJECT_ID || 'lasereyes',
+    projectId: import.meta.env.VITE_SANDSHREW_PROJECT_ID,
     network: bitcoin.networks.bitcoin,
     networkType: 'mainnet'
   },

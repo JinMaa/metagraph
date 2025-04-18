@@ -154,9 +154,10 @@ export const getAddressInfo = async (address, endpoint = 'regtest') => {
     console.log(`Getting address info for ${address} with ${endpoint} endpoint`);
     
     // Make a direct fetch request to the Esplora API
-    const url = endpoint === 'mainnet' ? 'https://mainnet.sandshrew.io/v2/lasereyes' :
-                endpoint === 'oylnet' ? 'https://oylnet.oyl.gg/v2/lasereyes' :
-                'http://localhost:18888/v1/lasereyes';
+    const projectId = import.meta.env.VITE_SANDSHREW_PROJECT_ID;
+    const url = endpoint === 'mainnet' ? `https://mainnet.sandshrew.io/v2/${projectId}` :
+                endpoint === 'oylnet' ? `https://oylnet.oyl.gg/v2/${projectId}` :
+                `http://localhost:18888/v1/${projectId}`;
     
     const response = await fetch(url, {
       method: 'POST',
@@ -213,9 +214,10 @@ export const getAddressTransactionsChain = async (address, endpoint = 'regtest',
     console.log(`Getting transactions for address ${address} with ${endpoint} endpoint (lastSeenTxid: ${lastSeenTxid || 'null'})`);
     
     // Make a direct fetch request to the Esplora API
-    const url = endpoint === 'mainnet' ? 'https://mainnet.sandshrew.io/v2/lasereyes' :
-                endpoint === 'oylnet' ? 'https://oylnet.oyl.gg/v2/lasereyes' :
-                'http://localhost:18888/v1/lasereyes';
+    const projectId = import.meta.env.VITE_SANDSHREW_PROJECT_ID;
+    const url = endpoint === 'mainnet' ? `https://mainnet.sandshrew.io/v2/${projectId}` :
+                endpoint === 'oylnet' ? `https://oylnet.oyl.gg/v2/${projectId}` :
+                `http://localhost:18888/v1/${projectId}`;
     
     const params = lastSeenTxid ? [address, lastSeenTxid] : [address];
     

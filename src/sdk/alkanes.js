@@ -509,9 +509,10 @@ export const getProtorunesByOutpoint = async (params, height, endpoint = 'regtes
     const txidForApi = params.txid;
     
     // Determine the API URL based on the endpoint
-    const url = endpoint === 'mainnet' ? 'https://mainnet.sandshrew.io/v2/lasereyes' :
-                endpoint === 'oylnet' ? 'https://oylnet.oyl.gg/v2/lasereyes' :
-                'http://localhost:18888/v1/lasereyes';
+    const projectId = import.meta.env.VITE_SANDSHREW_PROJECT_ID;
+    const url = endpoint === 'mainnet' ? `https://mainnet.sandshrew.io/v2/${projectId}` :
+                endpoint === 'oylnet' ? `https://oylnet.oyl.gg/v2/${projectId}` :
+                `http://localhost:18888/v1/${projectId}`;
     
     console.log(`Making API call to ${url} with txid: ${txidForApi}, vout: ${params.vout}, height: ${height}`);
     

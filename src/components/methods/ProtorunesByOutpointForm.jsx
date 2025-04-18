@@ -115,7 +115,7 @@ const ProtorunesByOutpointForm = ({ endpoint = 'mainnet' }) => {
     },
     890550
   ]
-}' https://mainnet.sandshrew.io/v2/lasereyes`
+}' https://mainnet.sandshrew.io/v2/lasereyes}'}`
       }}
       notes="Note that the txid in the API call must be in byte-reversed format (as shown in the example), which is different from how it appears in block explorers. You need to manually reverse the byte order of the txid when entering it in this form. The protocol tag defaults to '1' but can be changed for different protocols. Ensure the txid, vout, and height correspond to a valid transaction on the current network.
 
