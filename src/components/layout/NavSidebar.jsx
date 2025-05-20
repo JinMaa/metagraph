@@ -146,6 +146,24 @@ const NavSidebar = () => {
         )}
       </fieldset>
       
+      {/* Utilities Section */}
+      <fieldset className="group-box" style={{ marginTop: '10px' }}>
+        <legend>Utilities</legend>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div>
+            <Link 
+              to="/clock-in"
+              className={`nav-link ${isActive('/clock-in') ? 'active' : ''}`}
+            >
+              Clock In
+            </Link>
+            <p style={{ marginTop: '2px', fontSize: '11px', color: '#555' }}>
+              Track your work sessions
+            </p>
+          </div>
+        </div>
+      </fieldset>
+
       {/* Link to original home page */}
       <div style={{ marginTop: '15px', textAlign: 'center' }}>
         <Link 

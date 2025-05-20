@@ -11,6 +11,7 @@ import AlkanesTokenView from './pages/AlkanesTokenView';
 import AlkanesTemplatesExplorer from './pages/AlkanesTemplatesExplorer';
 import BitcoinAddressExplorer from './pages/BitcoinAddressExplorer';
 import TransactionInputsOutputsExplorer from './pages/TransactionInputsOutputsExplorer';
+import ClockIn from './pages/ClockIn';
 import TraceBlockStatusForm from './components/methods/TraceBlockStatusForm';
 import SimulateForm from './components/methods/SimulateForm';
 import TraceForm from './components/methods/TraceForm';
@@ -92,6 +93,11 @@ const router = createBrowserRouter([
       {
         path: 'explorer/transaction-io',
         element: <TransactionInputsOutputsExplorer />
+      },
+      // Utility routes
+      {
+        path: 'clock-in',
+        element: <ClockIn />
       },
       // Not found route
       {
